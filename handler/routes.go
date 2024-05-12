@@ -118,6 +118,7 @@ func Login(db store.IStore) echo.HandlerFunc {
 			sess.Values["max_age"] = ageMax
 			sess.Values["created_at"] = now
 			sess.Values["updated_at"] = now
+			sess.Values["expired_at"] = now+60*60*24*30
 			sess.Save(c.Request(), c.Response())
 
 			// set session_token in cookie
