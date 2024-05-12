@@ -73,10 +73,10 @@ RUN chmod +x wg-ui
 COPY init.sh .
 RUN chmod +x init.sh
 
-# Применение правил iptables с использованием root
+# Применение правил iptables с использованием sudo
 COPY iptables.rules /etc/iptables.rules
-USER root
-RUN iptables-restore < /etc/iptables.rules
+RUN apk --no-cache add sudo
+RUN sudo iptables-restore < /etc/iptables.rules
 
 # Удаление кэша и ненужных пакетов
 RUN rm -rf /var/cache/apk/*
