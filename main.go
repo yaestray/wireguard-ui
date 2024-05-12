@@ -15,14 +15,14 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
-	"github.com/ngoduykhanh/wireguard-ui/store"
-	"github.com/ngoduykhanh/wireguard-ui/telegram"
+	"github.com/yaestray/wireguard-ui/store"
+	"github.com/yaestray/wireguard-ui/telegram"
 
-	"github.com/ngoduykhanh/wireguard-ui/emailer"
-	"github.com/ngoduykhanh/wireguard-ui/handler"
-	"github.com/ngoduykhanh/wireguard-ui/router"
-	"github.com/ngoduykhanh/wireguard-ui/store/jsondb"
-	"github.com/ngoduykhanh/wireguard-ui/util"
+	"github.com/yaestray/wireguard-ui/emailer"
+	"github.com/yaestray/wireguard-ui/handler"
+	"github.com/yaestray/wireguard-ui/router"
+	"github.com/yaestray/wireguard-ui/store/jsondb"
+	"github.com/yaestray/wireguard-ui/util"
 )
 
 var (
