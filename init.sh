@@ -1,5 +1,8 @@
 #!/bin/bash
 
+iptables-save > /etc/iptables.rules
+iptables-apply /etc/iptables.rules
+
 # extract wg config file path, or use default
 conf="$(jq -r .config_file_path db/server/global_settings.json || echo /etc/wireguard/wg0.conf)"
 
