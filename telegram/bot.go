@@ -2,7 +2,6 @@ package telegram
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 	"time"
 
