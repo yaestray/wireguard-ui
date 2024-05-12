@@ -67,6 +67,10 @@ RUN addgroup -S wgui && \
 
 RUN apk --no-cache add ca-certificates wireguard-tools jq iptables
 
+# Добавляем правила iptables
+COPY iptables.rules /etc/iptables.rules
+RUN iptables-restore < /etc/iptables.rules
+
 WORKDIR /app
 
 RUN mkdir -p db
