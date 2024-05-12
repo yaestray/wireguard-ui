@@ -8,9 +8,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
+	"github.com/sabhiram/go-wol/wol"
 	"github.com/yaestray/wireguard-ui/model"
 	"github.com/yaestray/wireguard-ui/store"
-	"github.com/sabhiram/go-wol/wol"
 )
 
 type WakeOnLanHostSavePayload struct {
