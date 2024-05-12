@@ -111,6 +111,13 @@ func Login(db store.IStore) echo.HandlerFunc {
 			// set session_token
 			tokenUID := xid.New().String()
 			now := time.Now().UTC().Unix()
+
+			// Преобразуем количество секунд в объект времени
+   currentTime := time.Unix(now, 0)
+
+   // Добавляем месяц к текущему времени
+   futureTime := currentTime.AddDate(0, 1, 0) // Добавляем 1 месяц
+
 			sess.Values["username"] = dbuser.Username
 			sess.Values["user_hash"] = util.GetDBUserCRC32(dbuser)
 			sess.Values["admin"] = dbuser.Admin
@@ -118,7 +125,7 @@ func Login(db store.IStore) echo.HandlerFunc {
 			sess.Values["max_age"] = ageMax
 			sess.Values["created_at"] = now
 			sess.Values["updated_at"] = now
-			sess.Values["expired_at"] = now+60*60*24*30
+			sess.Values["expired_at"] = futureTime
 			sess.Save(c.Request(), c.Response())
 
 			// set session_token in cookie
