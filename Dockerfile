@@ -52,10 +52,6 @@ COPY . /build
 # Move custom assets
 RUN cp -r /build/custom/ assets/
 
-RUN go get github.com/yaestray/wireguard-ui/model
-RUN go get github.com/yaestray/wireguard-ui/store
-RUN go get github.com/yaestray/wireguard-ui/util
-RUN go get github.com/yaestray/wireguard-ui/telegram
 # Build
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-X 'main.appVersion=${APP_VERSION}' -X 'main.buildTime=${BUILD_TIME}' -X 'main.gitCommit=${GIT_COMMIT}'" -a -o wg-ui .
 
@@ -69,6 +65,9 @@ RUN apk --no-cache add ca-certificates wireguard-tools jq iptables
 
 # Добавляем правила iptables
 COPY iptables.rules /etc/iptables.rules
+
+# Используем права суперпользователя для применения правил iptables
+USER root
 RUN iptables-restore < /etc/iptables.rules
 
 WORKDIR /app
