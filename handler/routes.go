@@ -113,7 +113,8 @@ func Login(db store.IStore) echo.HandlerFunc {
 			now := time.Now().UTC().Unix()
 
 			// Добавляем месяц к текущему времени
-			futureTime := now.AddDate(0, 1, 0) // Добавляем 1 месяц
+			currentTime := time.Now().UTC()
+			futureTime := currentTime.AddDate(0, 1, 0) // Добавляем 1 месяц
 
 			sess.Values["username"] = dbuser.Username
 			sess.Values["user_hash"] = util.GetDBUserCRC32(dbuser)
