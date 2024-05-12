@@ -115,19 +115,6 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 				}
 			}
 		}
-
-		// Обработка команд пользователя
-		if update.Message.IsCommand() {
-			command := update.Message.Command()
-			switch command {
-			case "unknown":
-				// Если получена незнакомая команда, отправить текст 1
-				_, _ = bot.SendMessage("Текст 1: Это незнакомая команда.", update.Message.Chat.ID, nil)
-			case "code":
-				// Если получена команда "code", отправить текст 2
-				_, _ = bot.SendMessage("Текст 2: Это текст для обработки кода.", update.Message.Chat.ID, nil)
-			}
-		}
 	}
 	return err
 }
