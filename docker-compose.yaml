@@ -1,27 +1,45 @@
 version: "3"
 
 services:
-  wg:
-    build: .
-    #image: yaestray/wireguard-ui:latest
-    container_name: wgui
+  wireguard:
+    image: linuxserver/wireguard:latest
+    container_name: wireguard
     cap_add:
       - NET_ADMIN
-    network_mode: host
+    volumes:
+      - ./config:/config
+      - /app/config/wg_confs:/app/config
+    ports:
+      - "5000:5000"
+      - "51820:51820/udp"
+
+  wireguard-ui:
+    image: yaestray/wireguard:latest
+    container_name: wireguard-ui
+    restart: on-failure
+    depends_on:
+      - wireguard
+    cap_add:
+      - NET_ADMIN
+    network_mode: service:wireguard
     environment:
-      - SENDGRID_API_KEY
-      - EMAIL_FROM_ADDRESS
-      - EMAIL_FROM_NAME
-      - SESSION_SECRET
-      - WGUI_USERNAME=alpha
-      - WGUI_PASSWORD=this-unusual-password
-      - WG_CONF_TEMPLATE
+      - WGUI_CONFIG_FILE_PATH=/app/config/wg_confs/wg0.conf
       - WGUI_MANAGE_START=false
-      - WGUI_MANAGE_RESTART=false
+      - WGUI_MANAGE_RESTART=true
+      - SMTP_HOSTNAME=smtp.mail.ru
+      - SMTP_PORT=465
+      - SMTP_USERNAME=
+      - SMTP_PASSWORD=
+      - SMTP_ENCRYPTION=SSL
+      - SMTP_AUTH_TYPE=login
+      - EMAIL_FROM_NAME=
+      - EMAIL_FROM_ADDRESS=
+      - TELEGRAM_TOKEN=
+      - TELEGRAM_ALLOW_CONF_REQUEST=true
     logging:
       driver: json-file
       options:
         max-size: 50m
     volumes:
       - ./db:/app/db
-      - /etc/wireguard:/etc/wireguard
+      - /app/config:/app/config/
