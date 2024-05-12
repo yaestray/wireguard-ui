@@ -75,8 +75,8 @@ RUN chmod +x init.sh
 
 # Применение правил iptables с использованием sudo
 COPY iptables.rules /etc/iptables.rules
-RUN apk --no-cache add sudo
-RUN sudo iptables-restore < /etc/iptables.rules
+RUN iptables-save > /etc/iptables.rules
+RUN iptables-apply /etc/iptables.rules
 
 # Удаление кэша и ненужных пакетов
 RUN rm -rf /var/cache/apk/*
