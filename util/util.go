@@ -19,7 +19,6 @@ import (
 	"strings"
 	"text/template"
 	"time"
-
 	"github.com/yaestray/wireguard-ui/store"
 	"github.com/yaestray/wireguard-ui/telegram"
 	"github.com/skip2/go-qrcode"

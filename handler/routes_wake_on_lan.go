@@ -5,7 +5,6 @@ import (
 	"net"
 	"net/http"
 	"time"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"github.com/yaestray/wireguard-ui/model"
