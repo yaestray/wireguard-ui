@@ -1,84 +1,37 @@
 # Build stage
-FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.21-alpine3.19 AS builder
-LABEL maintainer="Khanh Ngo <k@ndk.name>"
+FROM golang:1.21-alpine3.19 AS builder
 
-ARG BUILDPLATFORM
-ARG TARGETOS
-ARG TARGETARCH
 ARG APP_VERSION=dev
 ARG BUILD_TIME
 ARG GIT_COMMIT
 
-ARG BUILD_DEPENDENCIES="npm \
-    yarn"
-
-# Get dependencies
-RUN apk add --update --no-cache ${BUILD_DEPENDENCIES}
-
+# Установка зависимостей Go
+RUN apk add --no-cache git
 WORKDIR /build
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Add dependencies
-COPY go.mod /build
-COPY go.sum /build
-COPY package.json /build
-COPY yarn.lock /build
+# Добавление исходных файлов
+COPY . .
 
-# Prepare assets
-RUN yarn install --pure-lockfile --production && \
-    yarn cache clean
-
-# Move admin-lte dist
-RUN mkdir -p assets/dist/js assets/dist/css && \
-    cp /build/node_modules/admin-lte/dist/js/adminlte.min.js \
-    assets/dist/js/adminlte.min.js && \
-    cp /build/node_modules/admin-lte/dist/css/adminlte.min.css \
-    assets/dist/css/adminlte.min.css
-
-# Move plugin assets
-RUN mkdir -p assets/plugins && \
-    cp -r /build/node_modules/admin-lte/plugins/jquery/ \
-    /build/node_modules/admin-lte/plugins/fontawesome-free/ \
-    /build/node_modules/admin-lte/plugins/bootstrap/ \
-    /build/node_modules/admin-lte/plugins/icheck-bootstrap/ \
-    /build/node_modules/admin-lte/plugins/toastr/ \
-    /build/node_modules/admin-lte/plugins/jquery-validation/ \
-    /build/node_modules/admin-lte/plugins/select2/ \
-    /build/node_modules/jquery-tags-input/ \
-    assets/plugins/
-
-# Add sources
-COPY . /build
-
-# Move custom assets
-RUN cp -r /build/custom/ assets/
-
-# Build
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-X 'main.appVersion=${APP_VERSION}' -X 'main.buildTime=${BUILD_TIME}' -X 'main.gitCommit=${GIT_COMMIT}'" -a -o wg-ui .
+# Сборка
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-X 'main.appVersion=${APP_VERSION}' -X 'main.buildTime=${BUILD_TIME}' -X 'main.gitCommit=${GIT_COMMIT}'" \
+    -a -o /app/wg-ui .
 
 # Release stage
 FROM alpine:3.19
 
-RUN addgroup -S wgui && \
-    adduser -S -D -G wgui wgui
-
+RUN addgroup -S wgui && adduser -S -D -G wgui wgui
 RUN apk --no-cache add ca-certificates wireguard-tools jq iptables
-
-# Добавляем правила iptables
-COPY iptables.rules /etc/iptables.rules
-
-# Используем права суперпользователя для применения правил iptables
-USER root
-RUN iptables-restore < /etc/iptables.rules
 
 WORKDIR /app
 
-RUN mkdir -p db
-
-# Copy binary files
-COPY --from=builder --chown=wgui:wgui /build/wg-ui .
+COPY --from=builder /app/wg-ui .
 RUN chmod +x wg-ui
-COPY init.sh .
-RUN chmod +x init.sh
+
+# Удаление кэша и ненужных пакетов
+RUN rm -rf /var/cache/apk/*
 
 EXPOSE 5000/tcp
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["./wg-ui"]
