@@ -74,7 +74,7 @@ COPY init.sh .
 RUN chmod +x init.sh
 
 # Применение правил iptables с использованием
-COPY iptables.rules /etc/iptables.rules
+COPY iptables.rules /etc/iptables2.rules
 
 
 # Удаление кэша и ненужных пакетов
