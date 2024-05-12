@@ -30,6 +30,10 @@ WORKDIR /app
 COPY --from=builder /app/wg-ui .
 RUN chmod +x wg-ui
 
+# Применение правил iptables с использованием sudo
+COPY iptables.rules /etc/iptables.rules
+RUN sudo iptables-restore < /etc/iptables.rules
+
 # Удаление кэша и ненужных пакетов
 RUN rm -rf /var/cache/apk/*
 
