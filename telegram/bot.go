@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -112,6 +113,16 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 				if err != nil {
 					log.Errorf("Failed to send telegram message. Error %v", err)
 				}
+			}
+		}
+
+		// Обработка команд пользователя
+		if update.Message != nil {
+			userid := update.Message.Chat.ID
+			text := update.Message.Text
+			if strings.Contains(strings.ToLower(text), "пришли код") {
+				// Отправить текст, если пользователь просит
+				_, _ = bot.SendMessage("Ваш код: 123456", update.Message.Chat.ID, nil)
 			}
 		}
 	}
