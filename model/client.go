@@ -23,7 +23,7 @@ type Client struct {
 	Enabled         bool      `json:"enabled"`
 	CreatedAt       time.Time `json:"created_at"`
 	UpdatedAt       time.Time `json:"updated_at"`
-	ExpiredAt								time.Time	`json:"expired_at"`
+	ExpiredAt       time.Time `json:"expired_at"`
 }
 
 // ClientData includes the Client and extra data

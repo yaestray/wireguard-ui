@@ -113,10 +113,10 @@ func Login(db store.IStore) echo.HandlerFunc {
 			now := time.Now().UTC().Unix()
 
 			// Преобразуем количество секунд в объект времени
-   currentTime := time.Unix(now, 0)
+			currentTime := time.Unix(now, 0)
 
-   // Добавляем месяц к текущему времени
-   futureTime := currentTime.AddDate(0, 1, 0) // Добавляем 1 месяц
+			// Добавляем месяц к текущему времени
+			futureTime := currentTime.AddDate(0, 1, 0) // Добавляем 1 месяц
 
 			sess.Values["username"] = dbuser.Username
 			sess.Values["user_hash"] = util.GetDBUserCRC32(dbuser)
@@ -509,6 +509,11 @@ func NewClient(db store.IStore) echo.HandlerFunc {
 			}
 		}
 		client.CreatedAt = time.Now().UTC()
+		// Преобразуем количество секунд в объект времени
+		currentTime := time.Unix(now, 0)
+		// Добавляем месяц к текущему времени
+		futureTime := currentTime.AddDate(0, 1, 0) // Добавляем 1 месяц
+		client.ExpiredAt = futureTime
 		client.UpdatedAt = client.CreatedAt
 
 		// write client to the database
