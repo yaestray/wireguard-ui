@@ -85,7 +85,7 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 				}
 				floodMessageSent[userid] = struct{}{}
 				_, err := bot.SendMessage(
-					fmt.Sprintf("You can only request your configs once per %d minutes", FloodWait),
+					fmt.Sprintf("Запрашивать конфигурацию можно раз в %d минут, попробуй позже.:) ", FloodWait),
 					userid,
 					&echotron.MessageOptions{
 						ReplyToMessageID: update.Message.ID,
