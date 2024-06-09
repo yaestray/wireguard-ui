@@ -1,5 +1,4 @@
 package telegram
-package main
 
 import (
 	"fmt"
