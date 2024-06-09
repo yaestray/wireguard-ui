@@ -30,7 +30,6 @@ var (
 
 	floodWait        = make(map[int64]int64)
 	floodMessageSent = make(map[int64]struct{})
-	serverStarted    bool // Для отслеживания статуса сервера
 )
 
 func Start(initDeps TgBotInitDependencies) (err error) {

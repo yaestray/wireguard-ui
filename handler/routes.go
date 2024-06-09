@@ -1197,3 +1197,12 @@ func AboutPage() echo.HandlerFunc {
 		})
 	}
 }
+
+func GetTelegramTokenHandler(c echo.Context) error {
+	// Ваши действия для обработки запроса здесь
+	// Например, получение токена и его отправка обратно клиенту
+	token := "your_telegram_token"
+
+	// Отправляем токен обратно клиенту
+	return c.JSON(http.StatusOK, map[string]string{"token": token})
+}
