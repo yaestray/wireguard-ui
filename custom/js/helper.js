@@ -142,11 +142,9 @@ let telegramBotToken; // Переменная для хранения токена
 
 // Получение токена Telegram с сервера
 function fetchTelegramToken() {
-    fetch('/api/get_telegram_token')
+    return fetch('/api/get_telegram_token')
         .then(response => response.json())
-        .then(data => {
-            telegramBotToken = data.token; // Сохраняем полученный токен
-        })
+        .then(data => data.token)
         .catch(error => {
             console.error('Error fetching Telegram token:', error);
         });
@@ -154,13 +152,10 @@ function fetchTelegramToken() {
 
 // Функция отправки уведомления в Telegram
 function sendTelegramMessage(telegramUserId, message) {
-    // Тут должен быть код для отправки сообщения в Telegram через Telegram Bot API
-    // Например, можно использовать библиотеку axios для отправки запросов
-    // Подставьте сюда ваш токен бота и метод отправки сообщений
-	fetchTelegramToken().then(telegramBotToken => {
-        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-        // Теперь можно использовать telegramBotToken для отправки сообщения в Telegram
-    });
+    fetchTelegramToken().then(telegramBotToken => {
+		const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+		// Теперь можно использовать telegramBotToken для отправки сообщения в Telegram
+	});
     
     // Отправка сообщения
     axios.post(telegramApiUrl, {
