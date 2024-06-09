@@ -1,9 +1,14 @@
 package telegram
+package main
 
 import (
 	"fmt"
 	"sync"
 	"time"
+	"bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
 
 	"github.com/NicoNex/echotron/v3"
 	"github.com/labstack/gommon/log"
@@ -158,4 +163,56 @@ func updateFloodWait() {
 			delete(floodMessageSent, userid)
 		}
 	}
+}
+
+type NotificationRequest struct {
+    TelegramUserID string `json:"telegramUserId"`
+    Message        string `json:"message"`
+}
+
+func sendTelegramNotification(w http.ResponseWriter, r *http.Request) {
+    var req NotificationRequest
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    if err := sendMessageToTelegram(req.TelegramUserID, req.Message); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+}
+
+func sendMessageToTelegram(userID, message string) error {
+    botToken := "YOUR_TELEGRAM_BOT_TOKEN"
+    telegramAPIURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
+
+    payload := map[string]string{
+        "chat_id": userID,
+        "text":    message,
+    }
+
+    payloadBytes, err := json.Marshal(payload)
+    if err != nil {
+        return err
+    }
+
+    resp, err := http.Post(telegramAPIURL, "application/json", bytes.NewBuffer(payloadBytes))
+    if err != nil {
+        return err
+    }
+    defer resp.Body.Close()
+
+    if resp.StatusCode != http.StatusOK {
+        return fmt.Errorf("failed to send message, status code: %d", resp.StatusCode)
+    }
+
+    return nil
+}
+
+func main() {
+    http.HandleFunc("/api/send_telegram_notification", sendTelegramNotification)
+    http.ListenAndServe(":8080", nil)
 }
