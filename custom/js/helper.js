@@ -136,8 +136,7 @@ function fetchTelegramToken() {
 
 function sendTelegramMessage(telegramUserId, message) {
     fetchTelegramToken().then(telegramBotToken => {
-		const token := telegram.Token
-        const telegramApiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
