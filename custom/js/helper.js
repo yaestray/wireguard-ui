@@ -64,6 +64,7 @@ function renderClientList(data) {
                                         data-clientname="${obj.Client.name}">Email</button>
                                 </div>
                                 ${telegramButton}
+								<button class="btn btn-outline-success btn-sm" onclick="sendNotification('${obj.username}', '${obj.expired_at}', '${obj.telegram_userid}')">Pay</button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-danger btn-sm">More</button>
                                     <button type="button" class="btn btn-outline-danger btn-sm dropdown-toggle dropdown-icon" 
@@ -108,6 +109,31 @@ function renderClientList(data) {
 
         // add the client html elements to the list
         $('#client-list').append(html);
+    });
+}
+
+function sendNotification(username, expiredAt, telegramUserId) {
+    const today = new Date();
+    const expiryDate = new Date(expiredAt);
+    const timeDifference = expiryDate.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+    const message = `Hello ${username}, you have ${daysRemaining} days left before your subscription expires.`;
+
+    $.ajax({
+        url: '/api/send_telegram_notification',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            telegramUserId: telegramUserId,
+            message: message
+        }),
+        success: function(response) {
+            alert('Notification sent successfully');
+        },
+        error: function(error) {
+            alert('Failed to send notification');
+        }
     });
 }
 
