@@ -186,7 +186,10 @@ func sendTelegramNotification(w http.ResponseWriter, r *http.Request) {
 }
 
 func sendMessageToTelegram(userID, message string) error {
-    botToken := "YOUR_TELEGRAM_BOT_TOKEN"
+	botToken := Token
+	if botToken == "" || len(botToken) < 30 {
+		return
+	}
     telegramAPIURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 
     payload := map[string]string{
