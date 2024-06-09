@@ -119,7 +119,7 @@ function sendNotification(username, expiredAt, telegramUserId) {
     const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
     const message = `Hello ${username}, you have ${daysRemaining} days left before your subscription expires.`;
-	sendTelegramMessage(telegramUserId, telegramMessage);
+	sendTelegramMessage(telegramUserId, message);
 
     $.ajax({
         url: '/api/send_telegram_notification',
