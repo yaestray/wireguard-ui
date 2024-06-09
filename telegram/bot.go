@@ -9,7 +9,7 @@ import (
 
 	"github.com/NicoNex/echotron/v3"
 	"github.com/labstack/gommon/log"
-	"github.com/yaestray/wireguard-ui/store"	
+	"github.com/yaestray/wireguard-ui/store"
 )
 
 type SendRequestedConfigsToTelegram func(db store.IStore, userid int64) []string
@@ -30,6 +30,7 @@ var (
 
 	floodWait        = make(map[int64]int64)
 	floodMessageSent = make(map[int64]struct{})
+	serverStarted    bool // Для отслеживания статуса сервера
 )
 
 func Start(initDeps TgBotInitDependencies) (err error) {
@@ -117,18 +118,21 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 			}
 		}
 	}
-	
+
 	// Регистрация обработчика маршрута
 	http.HandleFunc("/api/get_telegram_token", GetTelegramTokenHandler)
 
-	// Запуск HTTP-сервера в горутине
-	go func() {
-		if err := http.ListenAndServe(":5000", nil); err != nil {
-			log.Fatalf("Failed to start HTTP server: %v", err)
-		}
-	}()
-	
-	return err
+	// Запуск HTTP-сервера в горутине, если он еще не запущен
+	if !serverStarted {
+		go func() {
+			if err := http.ListenAndServe(":5000", nil); err != nil {
+				log.Fatalf("Failed to start HTTP server: %v", err)
+			}
+		}()
+		serverStarted = true
+	}
+
+	return nil
 }
 
 func SendConfig(userid int64, clientName string, confData, qrData []byte, ignoreFloodWait bool) error {
@@ -177,3 +181,4 @@ func GetTelegramTokenHandler(w http.ResponseWriter, r *http.Request) {
 	// Возвращаем токен в формате JSON
 	json.NewEncoder(w).Encode(map[string]string{"token": Token})
 }
+	
