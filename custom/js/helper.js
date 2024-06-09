@@ -157,8 +157,10 @@ function sendTelegramMessage(telegramUserId, message) {
     // Тут должен быть код для отправки сообщения в Telegram через Telegram Bot API
     // Например, можно использовать библиотеку axios для отправки запросов
     // Подставьте сюда ваш токен бота и метод отправки сообщений
-	const telegramBotToken = fetchTelegramToken();
-    const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+	fetchTelegramToken().then(telegramBotToken => {
+        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+        // Теперь можно использовать telegramBotToken для отправки сообщения в Telegram
+    });
     
     // Отправка сообщения
     axios.post(telegramApiUrl, {
