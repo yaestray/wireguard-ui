@@ -150,23 +150,28 @@ function fetchTelegramToken() {
         });
 }
 
-// Функция отправки уведомления в Telegram
 function sendTelegramMessage(telegramUserId, message) {
     fetchTelegramToken().then(telegramBotToken => {
-		const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-		// Теперь можно использовать telegramBotToken для отправки сообщения в Telegram
-	});
-    
-    // Отправка сообщения
-    axios.post(telegramApiUrl, {
-        chat_id: telegramUserId,
-        text: message
-    })
-    .then(function (response) {
-        console.log('Telegram notification sent successfully:', response.data);
-    })
-    .catch(function (error) {
-        console.error('Failed to send Telegram notification:', error);
+        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: telegramUserId, text: message })
+        };
+
+        fetch(telegramApiUrl, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send Telegram notification');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Telegram notification sent successfully:', data);
+        })
+        .catch(error => {
+            console.error('Failed to send Telegram notification:', error);
+        });
     });
 }
 

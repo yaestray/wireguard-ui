@@ -1199,7 +1199,7 @@ func AboutPage() echo.HandlerFunc {
 }
 
 func GetTelegramTokenHandler(c echo.Context) error {
-	token := Token
+	token := telegram.Token
 
 	return c.JSON(http.StatusOK, map[string]string{"token": token})
 }
