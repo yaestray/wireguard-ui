@@ -119,19 +119,6 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 		}
 	}
 
-	// Регистрация обработчика маршрута
-	http.HandleFunc("/api/get_telegram_token", GetTelegramTokenHandler)
-
-	// Запуск HTTP-сервера в горутине, если он еще не запущен
-	if !serverStarted {
-		go func() {
-			if err := http.ListenAndServe(":5000", nil); err != nil {
-				log.Fatalf("Failed to start HTTP server: %v", err)
-			}
-		}()
-		serverStarted = true
-	}
-
 	return nil
 }
 
