@@ -181,4 +181,3 @@ func GetTelegramTokenHandler(w http.ResponseWriter, r *http.Request) {
 	// Возвращаем токен в формате JSON
 	json.NewEncoder(w).Encode(map[string]string{"token": Token})
 }
-	
