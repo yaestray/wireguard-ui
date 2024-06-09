@@ -118,24 +118,8 @@ function sendNotification(username, expiredAt, telegramUserId) {
     const timeDifference = expiryDate.getTime() - today.getTime();
     const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-    const message = `Hello ${username}, you have ${daysRemaining} days left before your subscription expires.`;
+    const message = `Привет! Твой аккаунт VPN будет отключен через ${daysRemaining} дн.`;
 	sendTelegramMessage(telegramUserId, message);
-
-    $.ajax({
-        url: '/api/send_telegram_notification',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            telegramUserId: telegramUserId,
-            message: message
-        }),
-        success: function(response) {
-            alert('Notification sent successfully');
-        },
-        error: function(error) {
-            alert('Failed to send notification');
-        }
-    });
 }
 
 let telegramBotToken; // Переменная для хранения токена
@@ -152,7 +136,8 @@ function fetchTelegramToken() {
 
 function sendTelegramMessage(telegramUserId, message) {
     fetchTelegramToken().then(telegramBotToken => {
-        const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+		const token := telegram.Token
+        const telegramApiUrl = `https://api.telegram.org/bot${token}/sendMessage`;
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
