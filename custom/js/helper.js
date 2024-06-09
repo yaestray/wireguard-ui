@@ -137,6 +137,27 @@ function sendNotification(username, expiredAt, telegramUserId) {
     });
 }
 
+// Функция отправки уведомления в Telegram
+function sendTelegramMessage(telegramUserId, message) {
+    // Тут должен быть код для отправки сообщения в Telegram через Telegram Bot API
+    // Например, можно использовать библиотеку axios для отправки запросов
+    // Подставьте сюда ваш токен бота и метод отправки сообщений
+	const telegramBotToken = process.env.TELEGRAM_TOKEN;
+    const telegramApiUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+    
+    // Отправка сообщения
+    axios.post(telegramApiUrl, {
+        chat_id: telegramUserId,
+        text: message
+    })
+    .then(function (response) {
+        console.log('Telegram notification sent successfully:', response.data);
+    })
+    .catch(function (error) {
+        console.error('Failed to send Telegram notification:', error);
+    });
+}
+
 function renderUserList(data) {
     $.each(data, function(index, obj) {
         let clientStatusHtml = '>'
