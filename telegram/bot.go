@@ -1,9 +1,7 @@
 package telegram
 
 import (
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"sync"
 	"time"
 
