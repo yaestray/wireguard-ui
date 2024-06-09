@@ -118,13 +118,13 @@ function sendNotification(username, expiredAt, telegramUserId) {
     const timeDifference = expiryDate.getTime() - today.getTime();
     const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-    const message = `Ïðèâåò! Òâîé àêêàóíò VPN áóäåò îòêëþ÷åí ÷åðåç ${daysRemaining} äí.`;
+    const message = `ÐŸÑ€Ð¸Ð²ÐµÑ‚! Ð¢Ð²Ð¾Ð¹ Ð°ÐºÐºÐ°ÑƒÐ½Ñ‚ VPN Ð±ÑƒÐ´ÐµÑ‚ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡ÐµÐ½ Ñ‡ÐµÑ€ÐµÐ· ${daysRemaining} Ð´Ð½.`;
 	sendTelegramMessage(telegramUserId, message);
 }
 
-let telegramBotToken; // Ïåðåìåííàÿ äëÿ õðàíåíèÿ òîêåíà
+let telegramBotToken; // ÐŸÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð°Ñ Ð´Ð»Ñ Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ Ñ‚Ð¾ÐºÐµÐ½Ð°
 
-// Ïîëó÷åíèå òîêåíà Telegram ñ ñåðâåðà
+// ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ðµ Ñ‚Ð¾ÐºÐµÐ½Ð° Telegram Ñ ÑÐµÑ€Ð²ÐµÑ€Ð°
 function fetchTelegramToken() {
     return fetch('/api/get_telegram_token')
         .then(response => response.json())
