@@ -1,16 +1,15 @@
-package main
 package telegram
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"sync"
 	"time"
 
 	"github.com/NicoNex/echotron/v3"
 	"github.com/labstack/gommon/log"
-	"github.com/yaestray/wireguard-ui/store"
-	"net/http"
-	"encoding/json"
+	"github.com/yaestray/wireguard-ui/store"	
 )
 
 type SendRequestedConfigsToTelegram func(db store.IStore, userid int64) []string
@@ -118,6 +117,17 @@ func Start(initDeps TgBotInitDependencies) (err error) {
 			}
 		}
 	}
+	
+	// Регистрация обработчика маршрута
+	http.HandleFunc("/api/get_telegram_token", GetTelegramTokenHandler)
+
+	// Запуск HTTP-сервера в горутине
+	go func() {
+		if err := http.ListenAndServe(":5000", nil); err != nil {
+			log.Fatalf("Failed to start HTTP server: %v", err)
+		}
+	}()
+	
 	return err
 }
 
@@ -167,6 +177,3 @@ func GetTelegramTokenHandler(w http.ResponseWriter, r *http.Request) {
 	// Возвращаем токен в формате JSON
 	json.NewEncoder(w).Encode(map[string]string{"token": Token})
 }
-
-// Где-то в вашем коде настройте обработчик маршрута
-http.HandleFunc("/api/get_telegram_token", GetTelegramTokenHandler)
