@@ -1,3 +1,4 @@
+package main
 package telegram
 
 import (
