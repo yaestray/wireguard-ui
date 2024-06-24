@@ -278,6 +278,10 @@ Wireguard Clients
         }
 		
 		function updateExpired(clientID) {
+            updateExpiredAt(clientID);
+        }
+		
+		function updateExpiredAt(clientID) {
 			const data = {"id": clientID};
             $.ajax({
                 cache: false,
