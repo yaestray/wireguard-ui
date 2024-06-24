@@ -92,9 +92,9 @@ function renderClientList(data) {
                                 <span class="info-box-text"><i class="fas fa-envelope"></i> ${obj.Client.email}</span>
                                 <span class="info-box-text"><i class="fas fa-clock"></i>
                                     ${prettyDateTime(obj.Client.created_at)}</span>
-                                <span class="info-box-text"><i class="ion-ios-clock-outline"></i>
+                                <span class="info-box-text"><i class="fas fa-history"></i>
                                     ${prettyDateTime(obj.Client.updated_at)}</span>
-                                <span class="info-box-text"><i class="fas fa-trash-undo"></i>
+                                <span class="info-box-text"><i class="ion-ios-clock-outline"></i>
                                     ${prettyDateTime(obj.Client.expired_at)}</span>
                                 <span class="info-box-text"><i class="fas fa-server" style="${obj.Client.use_server_dns ? "opacity: 1.0" : "opacity: 0.5"}"></i>
                                     ${obj.Client.use_server_dns ? 'DNS enabled' : 'DNS disabled'}</span>
