@@ -790,7 +790,7 @@ func updateExpiredAt(db store.IStore) echo.HandlerFunc {
 		}
 
 		client := *clientData.Client
-		
+
 		now := time.Now()
 		nextMonth := now.AddDate(0, 1, 0)
 		nextMonth = time.Date(nextMonth.Year(), nextMonth.Month(), 25, 0, 0, 0, 0, nextMonth.Location())
