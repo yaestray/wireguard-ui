@@ -802,7 +802,7 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 		
 				// Отправка уведомления в Telegram
 		message := "Срок действия вашей подписки был обновлен до " + nextMonth.Format("02.01.2006")
-		err = sendTelegramNotification(client.TelegramUserID, message)
+		err = sendTelegramNotification(client.TgUserid, message)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, "Client updated, but failed to send Telegram notification"})
 		}
