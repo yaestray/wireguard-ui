@@ -815,7 +815,7 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 
 // fetchTelegramToken получает токен Telegram с сервера
 func fetchTelegramToken() (string, error) {
-	resp, err := http.Get(util.BasePath+"/api/get_telegram_token")
+	resp, err := http.Get(util.BasePath + "/api/get_telegram_token")
 	if err != nil {
 		return "", fmt.Errorf("failed to make GET request: %v", err)
 	}
