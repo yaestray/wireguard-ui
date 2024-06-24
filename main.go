@@ -243,6 +243,7 @@ func main() {
 	app.POST(util.BasePath+"/email-client", handler.EmailClient(db, sendmail, defaultEmailSubject, defaultEmailContent), handler.ValidSession, handler.ContentTypeJson)
 	app.POST(util.BasePath+"/send-telegram-client", handler.SendTelegramClient(db), handler.ValidSession, handler.ContentTypeJson)
 	app.POST(util.BasePath+"/client/set-status", handler.SetClientStatus(db), handler.ValidSession, handler.ContentTypeJson)
+	app.POST(util.BasePath+"/client/update-expiredat", handler.updateExpiredAt(db), handler.ValidSession, handler.ContentTypeJson)
 	app.POST(util.BasePath+"/remove-client", handler.RemoveClient(db), handler.ValidSession, handler.ContentTypeJson)
 	app.GET(util.BasePath+"/download", handler.DownloadClient(db), handler.ValidSession)
 	app.GET(util.BasePath+"/wg-server", handler.WireGuardServer(db), handler.ValidSession, handler.RefreshSession, handler.NeedsAdmin)
@@ -262,8 +263,6 @@ func main() {
 	app.POST(util.BasePath+"/wake_on_lan_host", handler.SaveWakeOnLanHost(db), handler.ValidSession, handler.ContentTypeJson)
 	app.DELETE(util.BasePath+"/wake_on_lan_host/:mac_address", handler.DeleteWakeOnHost(db), handler.ValidSession, handler.ContentTypeJson)
 	app.PUT(util.BasePath+"/wake_on_lan_host/:mac_address", handler.WakeOnHost(db), handler.ValidSession, handler.ContentTypeJson)
-	
-	app.POST(util.BasePath+"/client/update", handler.updateExpiredAt(db), handler.ValidSession, handler.ContentTypeJson)
 
 	// strip the "assets/" prefix from the embedded directory so files can be called directly without the "assets/"
 	// prefix

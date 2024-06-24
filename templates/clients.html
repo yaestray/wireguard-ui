@@ -276,6 +276,25 @@ Wireguard Clients
                 }
             });
         }
+		
+		function updateExpired(clientID) {
+			const data = {"id": clientID};
+            $.ajax({
+                cache: false,
+                method: 'POST',
+                url: '{{.basePath}}/client/update-expiredat',
+                dataType: 'json',
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (data) {
+                    console.log("Update client " + clientID);
+                },
+                error: function (jqXHR, exception) {
+                    const responseJson = jQuery.parseJSON(jqXHR.responseText);
+                    toastr.error(responseJson['message']);
+                }
+            });
+		}
 
         function setClientStatus(clientID, status) {
             const data = {"id": clientID, "status": status};

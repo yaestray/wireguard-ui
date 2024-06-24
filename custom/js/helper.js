@@ -113,10 +113,6 @@ function renderClientList(data) {
     });
 }
 
-function updateExpired(clientID) {
-	updateExpiredAt(clientID);
-}
-
 function sendNotification(username, expiredAt, telegramUserId) {
     const today = new Date();
     const expiryDate = new Date(expiredAt);
