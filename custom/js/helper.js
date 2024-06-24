@@ -65,6 +65,7 @@ function renderClientList(data) {
                                 </div>
                                 ${telegramButton}
 								<button class="btn btn-outline-success btn-sm" onclick="sendNotification('${obj.Client.name}', '${obj.Client.expired_at}', '${obj.Client.telegram_userid}')">Pay</button>
+								<button class="btn btn-outline-success btn-sm" onclick="updateExpired('${obj.Client.id}')">UP</button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-danger btn-sm">More</button>
                                     <button type="button" class="btn btn-outline-danger btn-sm dropdown-toggle dropdown-icon" 
@@ -110,6 +111,10 @@ function renderClientList(data) {
         // add the client html elements to the list
         $('#client-list').append(html);
     });
+}
+
+function updateExpired(clientID) {
+	updateExpiredAt(clientID);
 }
 
 function sendNotification(username, expiredAt, telegramUserId) {

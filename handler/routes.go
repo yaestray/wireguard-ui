@@ -769,6 +769,41 @@ func SetClientStatus(db store.IStore) echo.HandlerFunc {
 	}
 }
 
+func updateExpiredAt(db store.IStore) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := make(map[string]interface{})
+		err := json.NewDecoder(c.Request().Body).Decode(&data)
+
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, jsonHTTPResponse{false, "Bad post data"})
+		}
+
+		clientID := data["id"].(string)
+
+		if _, err := xid.FromString(clientID); err != nil {
+			return c.JSON(http.StatusBadRequest, jsonHTTPResponse{false, "Please provide a valid client ID"})
+		}
+
+		clientData, err := db.GetClientByID(clientID, model.QRCodeSettings{Enabled: false})
+		if err != nil {
+			return c.JSON(http.StatusNotFound, jsonHTTPResponse{false, err.Error()})
+		}
+
+		client := *clientData.Client
+		
+		now := time.Now()
+		nextMonth := now.AddDate(0, 1, 0)
+		nextMonth = time.Date(nextMonth.Year(), nextMonth.Month(), 25, 0, 0, 0, 0, nextMonth.Location())
+
+		client.ExpiredAt = nextMonth
+		if err := db.SaveClient(client); err != nil {
+			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, err.Error()})
+		}
+
+		return c.JSON(http.StatusOK, jsonHTTPResponse{true, "Client updated."})
+	}
+}
+
 // DownloadClient handler
 func DownloadClient(db store.IStore) echo.HandlerFunc {
 	return func(c echo.Context) error {

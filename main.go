@@ -262,6 +262,8 @@ func main() {
 	app.POST(util.BasePath+"/wake_on_lan_host", handler.SaveWakeOnLanHost(db), handler.ValidSession, handler.ContentTypeJson)
 	app.DELETE(util.BasePath+"/wake_on_lan_host/:mac_address", handler.DeleteWakeOnHost(db), handler.ValidSession, handler.ContentTypeJson)
 	app.PUT(util.BasePath+"/wake_on_lan_host/:mac_address", handler.WakeOnHost(db), handler.ValidSession, handler.ContentTypeJson)
+	
+	app.POST(util.BasePath+"/client/update", handler.updateExpiredAt(db), handler.ValidSession, handler.ContentTypeJson)
 
 	// strip the "assets/" prefix from the embedded directory so files can be called directly without the "assets/"
 	// prefix
