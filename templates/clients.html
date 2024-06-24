@@ -291,8 +291,8 @@ Wireguard Clients
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (data) {
-                    console.log("Update client " + clientID);
-					toastr.success('Updated client successfully');
+					const responseJson = jQuery.parseJSON(jqXHR.responseText);
+					toastr.success(responseJson['message']);
                      // Refresh the home page (clients page) after updating successfully
                     location.reload();
                 },
