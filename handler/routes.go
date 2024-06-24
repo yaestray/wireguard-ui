@@ -800,8 +800,8 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 		if err := db.SaveClient(client); err != nil {
 			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, err.Error()})
 		}
-		
-				// Отправка уведомления в Telegram
+
+		// Отправка уведомления в Telegram
 		message := "Срок действия вашей подписки был обновлен до " + nextMonth.Format("02.01.2006")
 		err = sendTelegramNotification(client.TgUserid, message)
 		if err != nil {
