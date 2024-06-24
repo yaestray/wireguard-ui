@@ -770,12 +770,6 @@ func SetClientStatus(db store.IStore) echo.HandlerFunc {
 	}
 }
 
-// jsonHTTPResponse структура для ответа в формате JSON
-type jsonHTTPResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := make(map[string]interface{})
