@@ -770,6 +770,12 @@ func SetClientStatus(db store.IStore) echo.HandlerFunc {
 	}
 }
 
+// jsonHTTPResponse структура для ответа в формате JSON
+type jsonHTTPResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := make(map[string]interface{})
@@ -803,9 +809,10 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 
 		// Отправка уведомления в Telegram
 		message := "Срок действия вашей подписки был обновлен до " + nextMonth.Format("02.01.2006")
-		err = sendTelegramNotification(client.TgUserid, message)
+		err = sendTelegramNotification(client.TelegramUserID, message)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, "Client updated, but failed to send Telegram notification"})
+			errMsg := fmt.Sprintf("Client updated, but failed to send Telegram notification: %v", err)
+			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, errMsg})
 		}
 
 		return c.JSON(http.StatusOK, jsonHTTPResponse{true, "Client updated."})
@@ -816,7 +823,7 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 func sendTelegramNotification(telegramUserID string, message string) error {
 	telegramBotToken, err := fetchTelegramToken()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to fetch Telegram token: %v", err)
 	}
 
 	telegramApiUrl := "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage"
@@ -826,7 +833,7 @@ func sendTelegramNotification(telegramUserID string, message string) error {
 
 	resp, err := http.PostForm(telegramApiUrl, data)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to send Telegram notification: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -841,7 +848,7 @@ func sendTelegramNotification(telegramUserID string, message string) error {
 func fetchTelegramToken() (string, error) {
 	resp, err := http.Get("/api/get_telegram_token")
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to make GET request: %v", err)
 	}
 	defer resp.Body.Close()
 
@@ -852,10 +859,15 @@ func fetchTelegramToken() (string, error) {
 	var result map[string]string
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to decode JSON response: %v", err)
 	}
 
-	return result["token"], nil
+	token, ok := result["token"]
+	if !ok {
+		return "", fmt.Errorf("token not found in JSON response")
+	}
+
+	return token, nil
 }
 
 // DownloadClient handler
