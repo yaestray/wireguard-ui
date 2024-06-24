@@ -769,7 +769,7 @@ func SetClientStatus(db store.IStore) echo.HandlerFunc {
 	}
 }
 
-func updateExpiredAt(db store.IStore) echo.HandlerFunc {
+func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		data := make(map[string]interface{})
 		err := json.NewDecoder(c.Request().Body).Decode(&data)
