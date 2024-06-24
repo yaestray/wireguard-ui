@@ -92,7 +92,7 @@ function renderClientList(data) {
                                 <span class="info-box-text"><i class="fas fa-envelope"></i> ${obj.Client.email}</span>
                                 <span class="info-box-text"><i class="fas fa-clock"></i>
                                     ${prettyDateTime(obj.Client.created_at)}</span>
-                                <span class="info-box-text"><i class="fas fa-history"></i>
+                                <span class="info-box-text"><i class="ion-ios-clock-outline"></i>
                                     ${prettyDateTime(obj.Client.updated_at)}</span>
                                 <span class="info-box-text"><i class="fas fa-trash-undo"></i>
                                     ${prettyDateTime(obj.Client.expired_at)}</span>
