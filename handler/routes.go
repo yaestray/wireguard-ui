@@ -797,6 +797,7 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 		nextMonth = time.Date(nextMonth.Year(), nextMonth.Month(), 25, 0, 0, 0, 0, nextMonth.Location())
 
 		client.ExpiredAt = nextMonth
+		client.Enabled = true
 		if err := db.SaveClient(client); err != nil {
 			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, err.Error()})
 		}
