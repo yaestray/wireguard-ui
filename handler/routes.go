@@ -841,10 +841,7 @@ func fetchTelegramToken() (string, error) {
 
 // sendTelegramNotification отправляет уведомление в Telegram
 func sendTelegramNotification(telegramUserID string, message string) error {
-	telegramBotToken, err := fetchTelegramToken()
-	if err != nil {
-		return fmt.Errorf("failed to fetch Telegram token: %v", err)
-	}
+	telegramBotToken := Token
 
 	telegramApiUrl := "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage"
 	data := url.Values{}
