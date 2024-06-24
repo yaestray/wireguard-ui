@@ -799,9 +799,62 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 		if err := db.SaveClient(client); err != nil {
 			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, err.Error()})
 		}
+		
+				// Отправка уведомления в Telegram
+		message := "Срок действия вашей подписки был обновлен до " + nextMonth.Format("02.01.2006")
+		err = sendTelegramNotification(client.TelegramUserID, message)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, jsonHTTPResponse{false, "Client updated, but failed to send Telegram notification"})
+		}
 
 		return c.JSON(http.StatusOK, jsonHTTPResponse{true, "Client updated."})
 	}
+}
+
+// sendTelegramNotification отправляет уведомление в Telegram
+func sendTelegramNotification(telegramUserID string, message string) error {
+	telegramBotToken, err := fetchTelegramToken()
+	if err != nil {
+		return err
+	}
+
+	telegramApiUrl := "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage"
+	data := url.Values{}
+	data.Set("chat_id", telegramUserID)
+	data.Set("text", message)
+
+	resp, err := http.PostForm(telegramApiUrl, data)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to send Telegram notification, status code: %d", resp.StatusCode)
+	}
+
+	return nil
+}
+
+// fetchTelegramToken получает токен Telegram с сервера
+func fetchTelegramToken() (string, error) {
+	resp, err := http.Get("/api/get_telegram_token")
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to fetch Telegram token, status code: %d", resp.StatusCode)
+	}
+
+	var result map[string]string
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return "", err
+	}
+
+	return result["token"], nil
 }
 
 // DownloadClient handler
