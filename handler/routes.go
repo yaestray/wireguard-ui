@@ -813,32 +813,6 @@ func UpdateExpiredAt(db store.IStore) echo.HandlerFunc {
 	}
 }
 
-// fetchTelegramToken получает токен Telegram с сервера
-func fetchTelegramToken() (string, error) {
-	resp, err := http.Get(util.BasePath + "/api/get_telegram_token")
-	if err != nil {
-		return "", fmt.Errorf("failed to make GET request: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to fetch Telegram token, status code: %d", resp.StatusCode)
-	}
-
-	var result map[string]string
-	err = json.NewDecoder(resp.Body).Decode(&result)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode JSON response: %v", err)
-	}
-
-	token, ok := result["token"]
-	if !ok {
-		return "", fmt.Errorf("token not found in JSON response")
-	}
-
-	return token, nil
-}
-
 // sendTelegramNotification отправляет уведомление в Telegram
 func sendTelegramNotification(telegramUserID string, message string) error {
 	telegramBotToken := telegram.Token
