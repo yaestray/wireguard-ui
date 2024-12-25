@@ -119,7 +119,7 @@ function sendNotification(username, expiredAt, telegramUserId) {
     const timeDifference = expiryDate.getTime() - today.getTime();
     const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
-    const message = `Привет! Твой аккаунт VPN будет отключен через ${daysRemaining} дн.`;
+    const message = `Привет! Твой аккаунт VPN будет отключен через ${daysRemaining} дн. Стоимость: 150р/мес.`;
 	sendTelegramMessage(telegramUserId, message);
 }
 
