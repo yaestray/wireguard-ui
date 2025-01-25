@@ -325,7 +325,7 @@ Wireguard Clients
             setClientStatus(clientID, true);
             const divElement = document.getElementById("paused_" + clientID);
             divElement.style.visibility = "hidden";
-            sendNotificationPause(client_tg, 0);
+            sendNotificationPause(telegramUserId, 0);
             updateApplyConfigVisibility()
         }
 
