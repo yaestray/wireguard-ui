@@ -123,6 +123,17 @@ function sendNotification(username, expiredAt, telegramUserId) {
 	sendTelegramMessage(telegramUserId, message);
 }
 
+
+function sendNotificationPause(telegramUserId, x) {
+    if (x==1) {
+        const message = `Привет! Твоя учётная запись отключена.`;
+    } else {
+        const message = `Привет! Твоя учётная запись активирована.`;
+    }
+
+	sendTelegramMessage(telegramUserId, message);
+}
+
 let telegramBotToken; // Переменная для хранения токена
 
 // Получение токена Telegram с сервера

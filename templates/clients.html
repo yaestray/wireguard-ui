@@ -543,6 +543,7 @@ Wireguard Clients
             const button = $(event.relatedTarget);
             const client_id = button.data('clientid');
             const client_name = button.data('clientname');
+            const client_tg = button.data('telegram_userid');
             const modal = $(this);
             modal.find('.modal-body').text("You are about to disable client " + client_name);
             modal.find('#pause_client_confirm').val(client_id);
@@ -552,7 +553,9 @@ Wireguard Clients
         $(document).ready(function () {
             $("#pause_client_confirm").click(function () {
                 const client_id = $(this).val();
+                const client_tg = $(this).val();
                 pauseClient(client_id);
+                sendNotificationPause(client_tg, 1)
                 $("#modal_pause_client").modal('hide');
             });
         });
