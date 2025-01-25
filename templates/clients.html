@@ -545,20 +545,24 @@ Wireguard Clients
             const client_name = button.data('clientname');
             const client_tg = button.data('telegram_userid');
             const modal = $(this);
+            
             modal.find('.modal-body').text("You are about to disable client " + client_name);
-            modal.find('#pause_client_confirm').val(client_id);
-        })
+            modal.find('#pause_client_confirm').data('clientid', client_id);
+            modal.find('#pause_client_confirm').data('telegram_userid', client_tg);
+        });
 
         // pause_client_confirm button event
         $(document).ready(function () {
             $("#pause_client_confirm").click(function () {
-                const client_id = $(this).val();
-                const client_tg = $(this).val();
+                const client_id = $(this).data('clientid');
+                const client_tg = $(this).data('telegram_userid');
+                
                 pauseClient(client_id);
-                sendNotificationPause(client_tg, 1)
+                sendNotificationPause(client_tg, 1);
                 $("#modal_pause_client").modal('hide');
             });
         });
+
 
         // modal_remove_client modal event
         $("#modal_remove_client").on('show.bs.modal', function (event) {

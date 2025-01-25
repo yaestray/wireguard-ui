@@ -77,7 +77,7 @@ function renderClientList(data) {
                                         data-clientname="${obj.Client.name}">Edit</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
                                         data-target="#modal_pause_client" data-clientid="${obj.Client.id}"
-                                        data-clientname="${obj.Client.name}">Disable</a>
+                                        data-clientname="${obj.Client.name}" data-telegram_userid="${obj.Client.telegram_userid}')">Disable</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
                                         data-target="#modal_remove_client" data-clientid="${obj.Client.id}"
                                         data-clientname="${obj.Client.name}">Delete</a>
