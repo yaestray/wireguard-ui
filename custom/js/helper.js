@@ -47,7 +47,7 @@ function renderClientList(data) {
         let html = `<div class="col-sm-6 col-md-6 col-lg-4" id="client_${obj.Client.id}">
                         <div class="info-box">
                             <div class="overlay" id="paused_${obj.Client.id}"` + clientStatusHtml
-                                + `<i class="paused-client fas fa-3x fa-play" onclick="resumeClient('${obj.Client.id}')"></i>
+                                + `<i class="paused-client fas fa-3x fa-play" onclick="resumeClient('${obj.Client.id}', '${obj.Client.telegram_userid}')"></i>
                             </div>
                             <div class="info-box-content" style="overflow: hidden">
                                 <div class="btn-group">
