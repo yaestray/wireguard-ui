@@ -125,14 +125,17 @@ function sendNotification(username, expiredAt, telegramUserId) {
 
 
 function sendNotificationPause(telegramUserId, x) {
-    if (x==1) {
-        const message = `Привет! Твоя учётная запись отключена.`;
+    let message; // Объявляем переменную message вне блоков
+
+    if (x == 1) {
+        message = `Привет! Твоя учётная запись отключена.`;
     } else {
-        const message = `Привет! Твоя учётная запись активирована.`;
+        message = `Привет! Твоя учётная запись активирована.`;
     }
 
-	sendTelegramMessage(telegramUserId, message);
+    sendTelegramMessage(telegramUserId, message);
 }
+
 
 let telegramBotToken; // Переменная для хранения токена
 
